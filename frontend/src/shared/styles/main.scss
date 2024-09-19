@@ -1,0 +1,57 @@
+@import 'variables';
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: $font-family-title;
+    color: $black;
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+*[role='button'] {
+    cursor: pointer;
+}
+
+button {
+    outline: none;
+}
+
+.btn-none {
+    padding: 0;
+    cursor: pointer;
+    outline: none;
+    border: none;
+    background-color: transparent;
+    font-size: inherit;
+}
+
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    margin: 0;
+}
+
+.main {
+    min-height: 80vh;
+}
+
+a {
+    color: $primary-green;
+}
+
+.container {
+    max-width: 1430px;
+    padding: 0 15px;
+    margin: 0 auto;
+}
+

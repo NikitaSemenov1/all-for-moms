@@ -1,0 +1,19 @@
+@import "@styles";
+
+.header {
+    background-color: $primary-green;
+    color: $primary-orange;
+    padding: 10px 0;
+}
+
+.link {
+    font-size: 18px;
+    font-weight: 500;
+    padding: 10px;
+    transition: opacity 0.3s;
+    color: $primary-orange;
+
+    &:hover {
+        opacity: 0.5;
+    }
+}

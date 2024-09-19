@@ -1,0 +1,11 @@
+@import "@styles";
+
+.card {
+    padding: 10px;
+    border: 1px solid $primary-green;
+    border-radius: $radius;
+    margin-top: 10px;
+    display: flex;
+    align-items: start;
+    justify-content: space-between;
+}

@@ -1,0 +1,721 @@
+openapi: 3.0.3
+info:
+  contact:
+    email: apiteam@swagger.io
+  description: All for Moms family web-application specification
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Swagger Petstore - OpenAPI 3.0
+  version: 1.0.11
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://petstore3.swagger.io/api/v3
+tags:
+- description: Family API
+  name: family
+- description: Task Manager API
+  name: task
+- description: Shopping List API
+  name: shopping list
+- description: Wishlist API
+  name: wishlist
+- description: Diary API
+  name: diary
+paths:
+  /family:
+    get:
+      description: Get family information
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/_family_get_200_response'
+          description: successfult request
+      tags:
+      - family
+  /family/awards:
+    get:
+      description: Get awards table
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Award'
+                type: array
+          description: successfult request
+      tags:
+      - family
+    post:
+      description: "Add award to awards table, user must have 'parent' role in family"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Award'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Award'
+                type: array
+          description: successfult request
+      tags:
+      - family
+  /family/awards/{award_id}:
+    delete:
+      description: Remove award
+      parameters:
+      - description: "ID of award to remove, user must be parent"
+        explode: false
+        in: path
+        name: award_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Award'
+                type: array
+          description: successfult request
+        "400":
+          description: bad request
+        "404":
+          description: award not found
+      tags:
+      - family
+  /family/awards/{award_id}/request:
+    post:
+      description: Reqest award
+      parameters:
+      - description: ID of award to request
+        explode: false
+        in: path
+        name: award_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Award'
+                type: array
+          description: successfult request
+        "400":
+          description: bad request
+        "404":
+          description: award not found
+      tags:
+      - family
+  /family/awards/{award_id}/assignments/{assignment_id}/approve:
+    post:
+      description: Approve requested award
+      parameters:
+      - description: ID of award to request
+        explode: false
+        in: path
+        name: award_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      - description: ID of reqeusted award assignment
+        explode: false
+        in: path
+        name: assignment_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Award'
+                type: array
+          description: successfult request
+        "400":
+          description: bad request
+        "404":
+          description: award not found
+      tags:
+      - family
+  /tasks:
+    get:
+      description: Get tasks availiable for the user
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Task'
+                type: array
+          description: successfult request
+        "403":
+          description: Unauthorized request
+      tags:
+      - task
+    post:
+      description: "Create tasks, user must have 'parent' role in family to assign\
+        \ the task to other member"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Task'
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Task'
+                type: array
+          description: successfult request
+      tags:
+      - task
+  /tasks/{task_id}/complete:
+    post:
+      description: "Complete task (mark completed, if assigned to me)"
+      parameters:
+      - description: ID of task to complete
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+          description: successfult request
+        "400":
+          description: bad request
+        "404":
+          description: task not found
+      tags:
+      - task
+  /tasks/{task_id}/approve:
+    post:
+      description: "Approve task (if I am a parent, task is created by myself and\
+        \ assignee has completed it)"
+      parameters:
+      - description: ID of task to approve
+        explode: false
+        in: path
+        name: task_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Task'
+          description: successfult request
+        "400":
+          description: bad request
+        "404":
+          description: task not found
+      tags:
+      - task
+  /shopping_list:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShoppingListItem'
+                type: array
+          description: successfult request
+      tags:
+      - shopping list
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListItem'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShoppingListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - shopping list
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShoppingListItem'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShoppingListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - shopping list
+  /shopping_list/{item_id}/reserve:
+    post:
+      parameters:
+      - description: ID of shopping list item to reserve
+        explode: false
+        in: path
+        name: item_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShoppingListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - shopping list
+  /shopping_list/{item_id}/complete:
+    post:
+      parameters:
+      - description: ID of shopping list item to complete
+        explode: false
+        in: path
+        name: item_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/ShoppingListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - shopping list
+  /wishlist:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WishListItem'
+                type: array
+          description: successfult request
+      tags:
+      - wishlist
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishListItem'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WishListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - wishlist
+    put:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WishListItem'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WishListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - wishlist
+  /wishlist/{item_id}/reserve:
+    post:
+      parameters:
+      - description: ID of wishlist item to reserve
+        explode: false
+        in: path
+        name: item_id
+        required: true
+        schema:
+          format: uuid
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/WishListItem'
+                type: array
+          description: Successful operation
+      tags:
+      - wishlist
+  /diary:
+    get:
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DiaryNote'
+                type: array
+          description: Successful operation
+      tags:
+      - diary
+    post:
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DiaryNote'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/DiaryNote'
+                type: array
+          description: Successful operation
+      tags:
+      - diary
+components:
+  schemas:
+    FamilyMember:
+      example:
+        role: parent
+        name: Vin Diesel
+        id: d00782d0-1e29-43e7-964b-e396c59c41b5
+        points: 130
+      properties:
+        id:
+          example: d00782d0-1e29-43e7-964b-e396c59c41b5
+          format: uuid
+          title: id
+          type: string
+        name:
+          example: Vin Diesel
+          title: name
+          type: string
+        role:
+          enum:
+          - parent
+          - child
+          example: parent
+          title: role
+          type: string
+        points:
+          example: 130
+          title: points
+          type: integer
+      title: FamilyMember
+      type: object
+    Award:
+      example:
+        cost: 500
+        assignments:
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          assignee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: approved
+        - id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          assignee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: approved
+        description: Поход в кино на сеанс по выбору
+        id: 4b4fcc35-5844-42e9-93b9-76b3260505da
+        title: Сходить в кино
+      properties:
+        id:
+          example: 4b4fcc35-5844-42e9-93b9-76b3260505da
+          format: uuid
+          title: id
+          type: string
+        title:
+          example: Сходить в кино
+          title: title
+          type: string
+        description:
+          example: Поход в кино на сеанс по выбору
+          title: description
+          type: string
+        cost:
+          example: 500
+          format: int32
+          title: cost
+          type: integer
+        assignments:
+          items:
+            $ref: '#/components/schemas/AwardAssignment'
+          title: assignments
+          type: array
+      title: Award
+      type: object
+    AwardAssignment:
+      example:
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        assignee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        status: approved
+      properties:
+        id:
+          format: uuid
+          title: id
+          type: string
+        assignee_id:
+          format: uuid
+          title: assignee_id
+          type: string
+        status:
+          enum:
+          - requested
+          - approved
+          example: approved
+          title: status
+          type: string
+      title: AwardAssignment
+      type: object
+    Task:
+      example:
+        assignments:
+        - assignee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: approved
+        - assignee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+          status: approved
+        assigner_id: d00782d0-1e29-43e7-964b-e396c59c41b5
+        start: 2000-01-23T04:56:07.000+00:00
+        description: Требуется поднять жопу с дивана и помыть посуду
+        end: 2000-01-23T04:56:07.000+00:00
+        id: a69f868a-fe8f-4c11-a0d4-51451769fd37
+        title: Помыть посуду
+      properties:
+        id:
+          example: a69f868a-fe8f-4c11-a0d4-51451769fd37
+          format: uuid
+          title: id
+          type: string
+        assigner_id:
+          example: d00782d0-1e29-43e7-964b-e396c59c41b5
+          format: uuid
+          title: assigner_id
+          type: string
+        title:
+          example: Помыть посуду
+          title: title
+          type: string
+        description:
+          example: Требуется поднять жопу с дивана и помыть посуду
+          title: description
+          type: string
+        start:
+          format: date-time
+          title: start
+          type: string
+        end:
+          format: date-time
+          title: end
+          type: string
+        assignments:
+          items:
+            $ref: '#/components/schemas/TaskAssignment'
+          title: assignments
+          type: array
+      title: Task
+      type: object
+    TaskAssignment:
+      example:
+        assignee_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        status: approved
+      properties:
+        assignee_id:
+          format: uuid
+          title: assignee_id
+          type: string
+        status:
+          enum:
+          - assigned
+          - completed
+          - approved
+          example: approved
+          title: status
+          type: string
+      title: TaskAssignment
+      type: object
+    ShoppingListItem:
+      example:
+        reservator_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        creator_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        description: description
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        status: reserved
+      properties:
+        id:
+          format: uuid
+          title: id
+          type: string
+        creator_id:
+          format: uuid
+          title: creator_id
+          type: string
+        reservator_id:
+          format: uuid
+          title: reservator_id
+          type: string
+        title:
+          title: title
+          type: string
+        description:
+          title: description
+          type: string
+        status:
+          enum:
+          - created
+          - reserved
+          - completed
+          example: reserved
+          title: status
+          type: string
+      title: ShoppingListItem
+      type: object
+    WishListItem:
+      example:
+        reservator_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        owner_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        description: description
+        id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        title: title
+        status: reserved
+      properties:
+        id:
+          format: uuid
+          title: id
+          type: string
+        owner_id:
+          format: uuid
+          title: owner_id
+          type: string
+        reservator_id:
+          format: uuid
+          title: reservator_id
+          type: string
+        title:
+          title: title
+          type: string
+        description:
+          title: description
+          type: string
+        status:
+          enum:
+          - hidden
+          - public
+          - reserved
+          - archived
+          example: reserved
+          title: status
+          type: string
+      title: WishListItem
+      type: object
+    DiaryNote:
+      example:
+        date: 2000-01-23T04:56:07.000+00:00
+        text: Сегодня я поднял жопу с дивана и помыл посуду
+      properties:
+        date:
+          format: date-time
+          title: date
+          type: string
+        text:
+          example: Сегодня я поднял жопу с дивана и помыл посуду
+          title: text
+          type: string
+      title: DiaryNote
+      type: object
+    _family_get_200_response:
+      example:
+        owner_id: 046b6c7f-0b8a-43b9-b35d-6489e6daee91
+        members:
+        - role: parent
+          name: Vin Diesel
+          id: d00782d0-1e29-43e7-964b-e396c59c41b5
+          points: 130
+        - role: parent
+          name: Vin Diesel
+          id: d00782d0-1e29-43e7-964b-e396c59c41b5
+          points: 130
+      properties:
+        owner_id:
+          format: uuid
+          title: owner_id
+          type: string
+        members:
+          items:
+            $ref: '#/components/schemas/FamilyMember'
+          title: members
+          type: array
+      title: _family_get_200_response
+      type: object

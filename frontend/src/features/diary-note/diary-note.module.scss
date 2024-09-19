@@ -1,0 +1,21 @@
+@import "@styles";
+
+.wrapper {
+    // border: 1px solid $primary-green;
+    padding: 10px;
+    border-radius: $radius;
+    margin-bottom: 10px;
+}
+
+.edit,.delete {
+    transition: opacity 0.3s;
+    cursor: pointer;
+    &:hover {
+        opacity: 0.5;
+    }
+}
+
+.text {
+    word-wrap: break-all;
+    // max-width: 600px;
+}
